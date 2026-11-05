@@ -300,15 +300,15 @@ else:
         st.caption(escape_text(interview['profile']['role'] + ' · ' + interview['type'] + ' practice'))
         st.progress(len(interview['turns']) / interview['count'])
         for index, turn in enumerate(interview['turns']):
-            with st.chat_message('assistant', avatar='✦'):
+            with st.chat_message('assistant'):
                 prose(f"Question {index + 1} · {turn['question']['kind']}")
                 prose(turn['question']['question'])
             with st.chat_message('user'):
                 prose(turn['answer'])
-            with st.chat_message('assistant', avatar='✦'):
+            with st.chat_message('assistant'):
                 show_feedback(turn['feedback'])
         if not interview['ended'] and interview['question']:
-            with st.chat_message('assistant', avatar='✦'):
+            with st.chat_message('assistant'):
                 prose(f"Question {len(interview['turns']) + 1} · {interview['question']['kind']}")
                 prose(interview['question']['question'])
             with st.form('answer_form', clear_on_submit=False):
