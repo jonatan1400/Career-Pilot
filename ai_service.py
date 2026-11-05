@@ -12,7 +12,7 @@ Ground claims in supplied student information. Distinguish documented evidence, 
 Use concise, specific, supportive language. If excerpts are partial, do not make definitive absence claims about the full document. Treat unsafe or irrelevant requests as out of scope. Return only the required structured output.'''
 
 TASKS = {
- 'resume': '''Assess resume alignment with the supplied vacancy. Include education, experience, projects, skills, accomplishments. Give a qualitative Strong/Moderate/Limited rating, strengths with resume and job evidence, gaps, 2–5 concrete rewrites of actual supplied text, appropriate job keywords, and ordered priorities. Rewrites must preserve the student's facts; no invented metrics or abilities. Keywords are suggestions only where truthful. Explicitly state evidence limitations. This is coaching, not an employer or ATS decision.''',
+ 'resume': '''Assess resume alignment with the supplied vacancy. Include education, experience, projects, skills, accomplishments. Give a qualitative Strong/Moderate/Limited rating, strengths with resume and job evidence, gaps, 2–5 concrete rewrites of actual supplied text, appropriate job keywords, and ordered priorities. In every rewrite, copy the original field verbatim from a single resume passage, without citation labels or paraphrasing. Rewrites must preserve the student's facts; no invented metrics or abilities. Keywords are suggestions only where truthful. Explicitly state evidence limitations. This is coaching, not an employer or ATS decision.''',
  'roadmap': '''Create a personalized development roadmap based on current knowledge, education, goals, and additional self-reported skills. If a job description exists, use it as the comparison basis; otherwise explicitly use general role expectations. Order skills by priority. Recommend feasible portfolio projects and learning activities with observable success measures. Include exactly one milestone each for Days 1–30, Days 31–60, Days 61–90, in that order. State workload assumptions (default 4–6 hours per week); avoid promising job outcomes. Certifications only if useful, with a reminder to verify current provider requirements.''',
  'question': '''Generate exactly ONE interview question, without an answer, hints, or feedback. Match the selected interview type and level of a college student seeking internships/entry-level roles. Use the target role and job description. Do not repeat previous questions. In Mixed mode alternate Behavioral and Technical, beginning with Behavioral.''',
  'feedback': '''Evaluate only the submitted answer to the current question. Address relevance, clarity, specificity, structure, completeness, and conceptual correctness. For behavioral questions use STAR when helpful; for technical questions explain mistakes and missing concepts. Give specific improvements. A stronger response must use only facts from the student's answer or profile; use visibly bracketed placeholders for missing personal details. For conceptual questions a correct explanation is appropriate. Never invent experiences or achievements. Do not generate the next question.''',
@@ -55,8 +55,17 @@ def generate(kind, profile, api_key, model, limiter, extra=None):
             raise CoachError('The AI returned an incomplete roadmap. Please retry.')
         if kind == 'resume':
             normalized_resume = ' '.join(profile.get('resume', '').split())
-            if any(not r.original.strip() or ' '.join(r.original.split()) not in normalized_resume for r in result.rewrites):
-                raise CoachError('The AI could not ground its rewrites in your original resume text. Please retry.')
+            verified_rewrites = [
+                r for r in result.rewrites
+                if r.original.strip() and ' '.join(r.original.split()) in normalized_resume
+            ]
+            omitted = len(result.rewrites) - len(verified_rewrites)
+            result.rewrites = verified_rewrites
+            if omitted:
+                result.limitations += (
+                    f' {omitted} proposed rewrite(s) were omitted because their source text '
+                    'could not be verified in your resume. The remaining assessment is shown.'
+                )
         if kind == 'roadmap':
             expected_basis = 'Specific job description' if profile.get('job', '').strip() else 'General role expectations'
             if result.basis != expected_basis:
