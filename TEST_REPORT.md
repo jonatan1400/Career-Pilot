@@ -45,3 +45,26 @@ On the actual hosted URL:
 ## Per-user API key update
 
 The web app now requires each student to enter their own key in a password field. There is no owner-key fallback. The key stays in session state and is passed only to the OpenAI client, not to model context. Dedicated key removal and full session clearing are provided. Added Streamlit coverage for key persistence across navigation, removal, and lack of environment-key fallback; these dependency-based tests remain unexecuted. Syntax compilation and the 11 dependency-free tests pass after this change.
+
+# Interface update — November 5, 2026
+
+## What changed
+
+- The interface in `app.py` was rebuilt around a dark navigation sidebar with a session checklist, a dedicated **Profile & Documents** page, per-page headers, and card-based result views: tabs for the resume analysis (strengths, gaps, rewrites, keywords), side-by-side evidence and before/after rewrites, priority and status chips, a three-column 90-day plan, a six-dimension feedback grid in the interview transcript, and an action row for interview controls.
+- Uploaded PDF/DOCX files are extracted immediately and placed in the matching text box for review; the resume and job areas no longer need a source-mode radio.
+- Profile fields keep unsaved edits for the whole session (`persist_state="session"`), a **Try with sample data** button fills a fictional profile, and saving reruns the page so the sidebar reflects the new state at once.
+- Theme and server settings moved to `.streamlit/config.toml` (including `server.maxUploadSize = 5` to match the 5 MB document cap); interface styles live in `styles.css`. Untrusted text is still escaped: Markdown through `formatting.escape_text`, HTML fragments through `html.escape`.
+- Tests moved to `tests/` and the live smoke test to `scripts/`, matching the paths this report already used; `pytest.ini` sets the import path. A `README.md`, `.gitignore`, and `.dockerignore` were added.
+
+## Executed on November 5, 2026
+
+- `python -m pytest -q` with Python 3.13.5, Streamlit 1.67.0, OpenAI SDK 2.54.0, Pydantic 2.14.3: **35 passed** (the 32 existing tests plus three new interface tests covering profile validation and saving, draft persistence across pages, navigation buttons, the sample loader, and result clearing after a profile change).
+- Visual walkthrough in a desktop browser against a fixture-backed copy of the app (OpenAI transport replaced by canned structured responses): home, profile, resume analysis tabs, roadmap, interview start, feedback, summary, and the home page tool status after results exist.
+- Document upload path checked in the real app by submitting a generated text PDF to the resume uploader: the text appeared in the resume box with a success notice, and submitting without a role showed the validation error next to the Save button.
+- Mobile viewport (375 px) emulated in the browser to confirm the sidebar collapses by default and columns stack.
+
+## Still not verified
+
+- No OpenAI API key was used; no live AI responses were generated or evaluated in the new interface. Run `scripts/smoke_live.py` with a developer key before release.
+- No deployment was created. The hosted-URL checklist above still applies.
+- The upload check used the browser's file API rather than a native file picker; repeat items 2 and 7 of the checklist on the hosted URL.

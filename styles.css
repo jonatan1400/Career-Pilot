@@ -1,0 +1,79 @@
+/* CareerPilot AI — interface styles layered on the Streamlit theme in .streamlit/config.toml. */
+
+/* Layout */
+.block-container { max-width: 1160px; padding-top: 1.6rem; padding-bottom: 4rem; }
+[data-testid="stHeader"] { background: transparent; }
+.stAppDeployButton { display: none; }
+h1, h2, h3 { letter-spacing: -0.02em; }
+h2 { font-size: 1.35rem !important; padding-top: 0.6rem !important; }
+h3 { font-size: 1.08rem !important; }
+
+/* Sidebar brand, navigation, and checklist */
+.cp-brand { display: flex; align-items: center; gap: 0.7rem; padding: 0.2rem 0.2rem 0.9rem; }
+.cp-logo { width: 42px; height: 42px; border-radius: 13px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; color: #fff; background: linear-gradient(135deg, #3b7bff, #8a5cf6); box-shadow: 0 8px 20px rgba(59, 123, 255, 0.35); }
+.cp-name { font-weight: 800; font-size: 1.18rem; line-height: 1.1; color: #fff; }
+.cp-tag { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: #9db4d6; margin-top: 0.25rem; }
+.cp-section { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; color: #9db4d6; margin: 0.9rem 0 0.3rem; }
+
+[data-testid="stSidebar"] [data-testid="stRadioGroup"] { gap: 0.2rem; }
+[data-testid="stSidebar"] [data-testid="stRadioGroup"] > div { width: 100%; }
+[data-testid="stSidebar"] [data-testid="stRadioOption"] {
+  display: flex; width: 100%; margin: 0; padding: 0.55rem 0.8rem; border-radius: 10px; cursor: pointer; transition: background 0.15s; }
+[data-testid="stSidebar"] [data-testid="stRadioOption"]:hover { background: rgba(255, 255, 255, 0.08); }
+[data-testid="stSidebar"] [data-testid="stRadioOption"][data-selected="true"] {
+  background: #2457c5; box-shadow: 0 6px 16px rgba(36, 87, 197, 0.45); }
+[data-testid="stSidebar"] [data-testid="stRadioOption"] > div > div:first-child { display: none; }
+[data-testid="stSidebar"] [data-testid="stRadioOption"] p { font-weight: 600; font-size: 0.95rem; color: #e8eef8; margin: 0; }
+
+.cp-check { list-style: none; padding: 0; margin: 0.2rem 0 0.5rem; display: flex; flex-direction: column; gap: 0.35rem; }
+.cp-check li { display: flex; align-items: center; gap: 0.55rem; font-size: 0.9rem; opacity: 0.78; }
+.cp-check li.done { opacity: 1; }
+.cp-check .cp-dot { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid currentColor; opacity: 0.6; flex: none;
+  display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 800; }
+.cp-check li.done .cp-dot { background: #22c55e; border-color: #22c55e; color: #fff; opacity: 1; }
+.cp-check.inline { flex-direction: row; flex-wrap: wrap; gap: 0.4rem 1.3rem; margin-bottom: 0.2rem; }
+
+/* Page headers and labels */
+.cp-pagehead { margin-bottom: 1.1rem; }
+.cp-eyebrow { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: #2457c5; margin-bottom: 0.3rem; }
+.cp-pagehead h1 { font-size: 2rem; font-weight: 800; margin: 0 0 0.35rem; padding: 0; line-height: 1.15; color: #142d4e; }
+.cp-pagehead p { font-size: 1.02rem; color: #4b5b73; margin: 0; max-width: 64ch; }
+.cp-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: #5a6b85; margin: 0.1rem 0 0.45rem; }
+.cp-muted { color: #5a6b85; font-size: 0.88rem; }
+.cp-cardhead { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.4rem; }
+.cp-cardtitle { font-weight: 700; font-size: 1.05rem; color: #142d4e; }
+.cp-qnum { font-weight: 800; color: #142d4e; }
+
+/* Chips */
+.cp-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.1rem 0 0.5rem; }
+.cp-chip { display: inline-flex; align-items: center; padding: 0.18rem 0.62rem; border-radius: 999px; font-size: 0.76rem;
+  font-weight: 700; letter-spacing: 0.02em; line-height: 1.4; white-space: nowrap; }
+.cp-chip.cp-big { font-size: 0.92rem; padding: 0.32rem 0.9rem; }
+.cp-neutral { background: #eef2f7; color: #3b4a5f; }
+.cp-good { background: #e3f6ea; color: #166534; }
+.cp-warn { background: #fff1d6; color: #92400e; }
+.cp-low { background: #fde7ea; color: #9f1239; }
+.cp-info { background: #e6eefc; color: #1e4bb8; }
+.cp-violet { background: #efe8fd; color: #5b21b6; }
+
+/* Quotes, lists, and feedback grid */
+.cp-quote { border-left: 3px solid #c9d6ea; background: #f6f8fc; padding: 0.55rem 0.8rem; border-radius: 0 10px 10px 0;
+  color: #2b3a52; font-size: 0.94rem; line-height: 1.5; margin: 0.2rem 0 0.55rem; }
+.cp-quote .cp-label { margin-bottom: 0.15rem; }
+.cp-quote.cp-better { border-left-color: #22c55e; background: #f0fbf4; }
+.cp-quote.cp-next { border-left-color: #2457c5; background: #eef3fd; }
+.cp-list { margin: 0.1rem 0 0.6rem 1.1rem; padding: 0; color: #2b3a52; font-size: 0.95rem; line-height: 1.5; }
+.cp-list li { margin-bottom: 0.25rem; }
+.cp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.55rem; margin: 0.2rem 0 0.75rem; }
+.cp-dim { background: #f6f8fc; border: 1px solid #e3e9f2; border-radius: 10px; padding: 0.55rem 0.7rem; font-size: 0.9rem; line-height: 1.45; color: #2b3a52; }
+.cp-dim b { display: block; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.1em; color: #5a6b85; margin-bottom: 0.2rem; }
+
+/* Home page steps and tool cards */
+.cp-step { display: flex; gap: 0.8rem; align-items: flex-start; padding: 0.4rem 0; }
+.cp-stepnum { width: 28px; height: 28px; border-radius: 50%; background: #e6eefc; color: #1e4bb8; font-weight: 800; font-size: 0.82rem;
+  display: flex; align-items: center; justify-content: center; flex: none; }
+.cp-step.done .cp-stepnum { background: #22c55e; color: #fff; }
+.cp-step b { display: block; color: #142d4e; }
+.cp-step span { font-size: 0.9rem; color: #4b5b73; }
+.cp-toolnum { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.16em; color: #2457c5; margin-bottom: 0.2rem; }
