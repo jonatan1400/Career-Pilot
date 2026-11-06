@@ -1,0 +1,26 @@
+# CareerPilot AI theme and server settings.
+[theme]
+base = "light"
+primaryColor = "#2457c5"
+backgroundColor = "#f4f7fb"
+secondaryBackgroundColor = "#ffffff"
+textColor = "#142d4e"
+linkColor = "#2457c5"
+borderColor = "#dbe3ee"
+showWidgetBorder = true
+baseRadius = "0.75rem"
+buttonRadius = "0.6rem"
+
+[theme.sidebar]
+backgroundColor = "#0f2544"
+secondaryBackgroundColor = "#1b3a63"
+textColor = "#e8eef8"
+primaryColor = "#7fb0ff"
+borderColor = "#2a4a75"
+
+[server]
+# Matches documents.MAX_BYTES so oversized uploads are rejected before extraction.
+maxUploadSize = 5
+
+[browser]
+gatherUsageStats = false

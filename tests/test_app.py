@@ -99,3 +99,56 @@ def test_key_is_session_only_and_removable(monkeypatch):
     button(app, 'Remove my API key').click().run()
     assert not app.session_state['user_api_key']
     assert not app.exception
+
+
+def field(app, label):
+    return next(x for x in list(app.text_input) + list(app.text_area) if x.label == label)
+
+
+def test_profile_page_validates_saves_and_persists_drafts():
+    app = AppTest.from_file(str(APP)).run()
+    app.sidebar.radio[0].set_value('Profile & Documents').run()
+    button(app, 'Save profile & documents').click().run()
+    assert any('target role' in e.value for e in app.error)
+    assert app.session_state['profile'] == {}
+    field(app, 'Desired role or career field *').set_value('Data analyst')
+    field(app, 'Resume or academic/professional background').set_value('Python and SQL coursework')
+    button(app, 'Save profile & documents').click().run()
+    assert not app.exception
+    assert app.session_state['profile']['role'] == 'Data analyst'
+    assert app.session_state['profile']['resume'] == 'Python and SQL coursework'
+    assert any('Profile saved' in s.value for s in app.success)
+    # Form drafts survive leaving and returning to the page.
+    field(app, 'Industry of interest').set_value('Retail').run()
+    app.sidebar.radio[0].set_value('Home').run()
+    app.sidebar.radio[0].set_value('Profile & Documents').run()
+    assert field(app, 'Industry of interest').value == 'Retail'
+
+
+def test_home_and_tool_buttons_navigate():
+    app = AppTest.from_file(str(APP)).run()
+    button(app, 'Set up my profile').click().run()
+    assert app.session_state['page'] == 'Profile & Documents'
+    app.sidebar.radio[0].set_value('Home').run()
+    button(app, 'Open Career Roadmap').click().run()
+    assert app.session_state['page'] == 'Career Roadmap'
+    assert button(app, 'Create my 90-day roadmap').disabled
+    button(app, 'Edit profile').click().run()
+    assert app.session_state['page'] == 'Profile & Documents'
+
+
+def test_sample_profile_and_changed_profile_clears_results():
+    app = AppTest.from_file(str(APP)).run()
+    app.session_state['resume_result'] = dict(alignment='Strong', summary='', strengths=[], gaps=[], rewrites=[],
+                                              appropriate_keywords=[], priorities=[], limitations='')
+    app.sidebar.radio[0].set_value('Profile & Documents').run()
+    button(app, 'Try with sample data').click().run()
+    assert app.session_state['field_role'] == 'Data analyst intern'
+    assert app.session_state['resume_result'] is not None
+    button(app, 'Save profile & documents').click().run()
+    assert not app.exception
+    assert app.session_state['profile']['role'] == 'Data analyst intern'
+    assert app.session_state['profile']['job'].startswith('Data analyst internship')
+    assert app.session_state['resume_result'] is None
+    app.sidebar.radio[0].set_value('Resume Analyzer').run()
+    assert not button(app, 'Analyze my resume').disabled
